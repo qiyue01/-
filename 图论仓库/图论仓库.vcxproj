@@ -169,6 +169,7 @@
     <ClCompile Include="普通isap.cpp" />
     <ClCompile Include="前向星dijkstra.cpp" />
     <ClCompile Include="普通费用流.cpp" />
+    <ClCompile Include="曼哈顿最小生成树.cpp" />
     <ClCompile Include="邻接表dijkstracpp.cpp" />
     <ClCompile Include="高速最大流.cpp" />
     <ClCompile Include="分数费用流.cpp" />

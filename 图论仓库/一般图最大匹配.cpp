@@ -143,24 +143,3 @@ namespace match_normal1
 	};
 }
 using namespace match_normal1;
-int main()
-{
-	ios::sync_with_stdio(false);
-	cin.tie(NULL);
-	cout.tie(NULL);
-	int n,u,v;
-	cin >> n;
-	match_normal p(n);
-	while(cin>>u>>v)
-		p.graph[u][v] = p.graph[v][u] = true;
-	p.edmond();
-	int count = 0;
-	for (int i = 1; i <= n; ++i)
-		if (p.match[i] > 0)
-			count++;
-	cout << count << endl;
-	for (int i = 1; i <= n; ++i)
-		if (i < p.match[i])
-			cout << i << " " << p.match[i] << endl;
-	return 0;
-}
