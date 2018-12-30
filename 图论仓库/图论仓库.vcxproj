@@ -164,6 +164,7 @@
     <ClCompile Include="primal_dual.cpp" />
     <ClCompile Include="一般图最大匹配.cpp" />
     <ClCompile Include="二分图.cpp" />
+    <ClCompile Include="图的联通性.cpp" />
     <ClCompile Include="图论仓库.cpp" />
     <ClCompile Include="无向图全局最小割.cpp" />
     <ClCompile Include="普通isap.cpp" />
