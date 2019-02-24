@@ -171,6 +171,7 @@
     <ClCompile Include="图的联通性.cpp" />
     <ClCompile Include="图论仓库.cpp" />
     <ClCompile Include="无向图全局最小割.cpp" />
+    <ClCompile Include="普通bf.cpp" />
     <ClCompile Include="普通isap.cpp" />
     <ClCompile Include="前向星dijkstra.cpp" />
     <ClCompile Include="普通费用流.cpp" />
