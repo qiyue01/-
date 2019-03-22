@@ -166,6 +166,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="primal_dual.cpp" />
+    <ClCompile Include="sat.cpp" />
     <ClCompile Include="一般图最大匹配.cpp" />
     <ClCompile Include="二分图.cpp" />
     <ClCompile Include="图的联通性.cpp" />

@@ -68,5 +68,8 @@
     <ClCompile Include="普通bf.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="sat.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
