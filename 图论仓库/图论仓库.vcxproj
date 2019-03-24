@@ -171,6 +171,7 @@
     <ClCompile Include="二分图.cpp" />
     <ClCompile Include="图的联通性.cpp" />
     <ClCompile Include="图论仓库.cpp" />
+    <ClCompile Include="小流量最大流.cpp" />
     <ClCompile Include="无向图全局最小割.cpp" />
     <ClCompile Include="普通bf.cpp" />
     <ClCompile Include="普通isap.cpp" />
