@@ -74,5 +74,17 @@
     <ClCompile Include="小流量最大流.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="dikstra——pbds.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="入队优化spfa.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="广义圆方树.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="圆方树.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

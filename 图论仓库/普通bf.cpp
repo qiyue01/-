@@ -21,7 +21,7 @@ const int N = 100010;
 const long long inf = 1e13;
 namespace bf
 {
-	long long dis[N];
+	long long dis[N],iq[N];
 	list<pair<int, long long>> edge[N];
 	int vis[N];
 	void add_edge(int u, int v, int w)
@@ -57,10 +57,11 @@ namespace bf
 		{
 			cur = que.front();
 			que.pop();
+			iq[cur] = 0;
 			vis[cur]++;
 			for (auto &s : edge[cur])
-				if (relax(cur, s.first, s.second))
-					que.push(s.first);
+				if (relax(cur, s.first, s.second) && iq[s.first]==false)
+					que.push(s.first),iq[s.first]=1;
 			if (vis[cur] > n + 1)
 			{
 				flag = false;

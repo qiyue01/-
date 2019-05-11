@@ -1,4 +1,4 @@
-#include "pch.h"
+/*
 #include <iostream>
 #include<vector>
 #include<cstring>
@@ -10,12 +10,11 @@
 #include<algorithm>
 #include<unordered_map>
 using namespace std;
-/*
 const int N = 100010;
 const long long inf = 1e13;
 namespace bf
 {
-	long long dis[N], iq[N], pre[N];
+	long long dis[N], iq[N],pre[N];
 	vector<pair<int, long long>> edge[N];
 	int vis[N];
 	void add_edge(int u, int v, int w)
@@ -44,19 +43,19 @@ namespace bf
 	bool bellman_ford(int beginning, int n)
 	{
 		dis[beginning] = 0;
-		priority_queue<pair<long long, int> > que;
-		que.push({ 0,beginning });
+		queue<int> que;
+		que.push(beginning);
 		bool flag = true;
 		int cur;
 		while (!que.empty())
 		{
-			cur = que.top().second;
+			cur = que.front();
 			que.pop();
-			//iq[cur] = 0;
+			iq[cur] = 0;
 			vis[cur]++;
 			for (auto &s : edge[cur])
-				if (relax(cur, s.first, s.second))
-					que.push({ -dis[s.first],s.first });
+				if (relax(cur, s.first, s.second) && iq[s.first] == false)
+					que.push(s.first), iq[s.first] = 1;
 			if (vis[cur] > n + 1)
 			{
 				flag = false;
