@@ -1,24 +1,19 @@
 #include "pch.h"
-#include<string>
-#include<cstring>
+#include <iostream>
 #include<vector>
-#include<algorithm>
-#include<map>
-#include<set>
-#include<deque>
-#include<iomanip>
-#include<sstream>
-#include<stack>
-#include<iostream>
-#include<limits>
-#include<bitset>
+#include<cstring>
 #include<list>
+#include<set>
 #include<queue>
-#include<memory>
-#include<functional>
+#include<map>
+#include<stack>
+#include<algorithm>
+#include<unordered_map>
 using namespace std;
-# define maxn 200000+10
-
+# define maxn 210000+10
+bool trans[maxn];
+int randd = 1;
+long long curd[maxn];
 class dijkstra
 {
 public:
@@ -26,60 +21,71 @@ public:
 	{
 		long long distance;
 		int father;
-		int sign;
-		friend bool operator <(node a, node b)
+		int sign, cnt;
+		friend bool operator >(node a, node b)
 		{
 			return b.distance > a.distance;
 		}
-		friend bool operator >(node a, node b)
+		friend bool operator <(node a, node b)
 		{
 			return b.distance < a.distance;
 		}
 	};
-	vector<pair<int,int> > G[1500];
+	vector<pair<pair<int, int>, int> > G[maxn];
 	priority_queue<node> part;
 	vector<node> way;
 	void set(long i)
 	{
 		way.resize(i + 1);
-		for (int i = 0; i < 1500; ++i)
-			G[i].clear();
 	}
-	void insert(long u, long v, int w)
+	void insert(long u, long v, int w, int s)
 	{
-		G[u].push_back(make_pair(v, w));
+		G[u].push_back({ make_pair(v, w),s });
 	}
-	bool relax(long u, long v, long w)
+	bool relax(long u, long v, long long w, bool s)
 	{
 		if (way[v].distance > way[u].distance + w)
 		{
 			way[v].distance = way[u].distance + w;
 			way[v].father = u;
+			curd[v] = way[v].distance;
+			trans[v] = s;
 			return true;
+		}
+		else if ((way[v].distance == way[u].distance + w && s == false))
+		{
+			trans[v] = s;
+			return false;
 		}
 		return false;
 	}
-	long long shortest_path(long beginning, long ending)
+	void shortest_path(long beginning)
 	{
 		for (long i = 0; i < way.size(); ++i)
 		{
-			way[i].distance = 110000000000;
+			way[i].distance = 0x3f3f3f3f3f3f3f;
 			way[i].father = -1;
 			way[i].sign = i;
+			way[i].cnt = 0;
+			curd[i] = 0x3f3f3f3f3f3f3f;
 		}
+		bool flag = false;
 		way[beginning].distance = 0;
 		part.push(way[beginning]);
-		while (part.size() != 0)
+		while (!part.empty())
 		{
 			node part2 = part.top();
 			part.pop();
-			for (int i=0;i<G[part2.sign].size();++i)
+			if (curd[part2.sign] < part2.distance)
+				continue;
+			for (int i = 0; i < G[part2.sign].size(); ++i)
 			{
-				int temp = G[part2.sign][i].first;
-				if (relax(part2.sign, temp, G[part2.sign][i].second))
+				int temp = G[part2.sign][i].first.first;
+				if (relax(part2.sign, temp, G[part2.sign][i].first.second, G[part2.sign][i].second))
+				{
 					part.push(way[temp]);
+				}
 			}
 		}
-		return way[ending].distance;
 	}
-};
+}dj;
