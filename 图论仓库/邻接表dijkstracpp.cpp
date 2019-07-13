@@ -11,81 +11,66 @@
 #include<unordered_map>
 using namespace std;
 # define maxn 210000+10
-bool trans[maxn];
-int randd = 1;
-long long curd[maxn];
-class dijkstra
+const int N = 300010;
+const long long inf = 1e18;
+#define int long long
+namespace bf
 {
-public:
-	struct node
+	long long dis[N], iq[N], pre[N];
+	vector<pair<int, long long>> edge[N];
+	int vis[N];
+	bool inque[N];
+	void add_edge(int u, int v, int w)
 	{
-		long long distance;
-		int father;
-		int sign, cnt;
-		friend bool operator >(node a, node b)
-		{
-			return b.distance > a.distance;
-		}
-		friend bool operator <(node a, node b)
-		{
-			return b.distance < a.distance;
-		}
-	};
-	vector<pair<pair<int, int>, int> > G[maxn];
-	priority_queue<node> part;
-	vector<node> way;
-	void set(long i)
-	{
-		way.resize(i + 1);
+		edge[u].push_back(make_pair(v, w));
 	}
-	void insert(long u, long v, int w, int s)
+	void init()
 	{
-		G[u].push_back({ make_pair(v, w),s });
-	}
-	bool relax(long u, long v, long long w, bool s)
-	{
-		if (way[v].distance > way[u].distance + w)
+		memset(inque, 0, sizeof(inque));
+		for (int i = 0; i < N; ++i)
 		{
-			way[v].distance = way[u].distance + w;
-			way[v].father = u;
-			curd[v] = way[v].distance;
-			trans[v] = s;
+			dis[i] = inf;
+			vis[i] = 0;
+			edge[i].clear();
+		}
+	}
+	bool relax(int u, int v, long long w)
+	{
+		if (dis[v] > dis[u] + w)
+		{
+			dis[v] = dis[u] + w;
+			pre[v] = u;
 			return true;
-		}
-		else if ((way[v].distance == way[u].distance + w && s == false))
-		{
-			trans[v] = s;
-			return false;
 		}
 		return false;
 	}
-	void shortest_path(long beginning)
+	bool bellman_ford(int beginning, int n)
 	{
-		for (long i = 0; i < way.size(); ++i)
+		dis[beginning] = 0;
+		priority_queue<pair<long long, int> > que;
+		que.push({ 0,beginning });
+		bool flag = true;
+		int cur;
+		while (!que.empty())
 		{
-			way[i].distance = 0x3f3f3f3f3f3f3f;
-			way[i].father = -1;
-			way[i].sign = i;
-			way[i].cnt = 0;
-			curd[i] = 0x3f3f3f3f3f3f3f;
-		}
-		bool flag = false;
-		way[beginning].distance = 0;
-		part.push(way[beginning]);
-		while (!part.empty())
-		{
-			node part2 = part.top();
-			part.pop();
-			if (curd[part2.sign] < part2.distance)
-				continue;
-			for (int i = 0; i < G[part2.sign].size(); ++i)
-			{
-				int temp = G[part2.sign][i].first.first;
-				if (relax(part2.sign, temp, G[part2.sign][i].first.second, G[part2.sign][i].second))
+			cur = que.top().second;
+			que.pop();
+			inque[cur] = false;
+			//iq[cur] = 0;
+			vis[cur]++;
+			for (auto &s : edge[cur])
+				if (relax(cur, s.first, s.second) && !inque[s.first])
 				{
-					part.push(way[temp]);
+					que.push({ -dis[s.first],s.first });
+					inque[s.first] = true;
 				}
+			if (vis[cur] > n + 1)
+			{
+				flag = false;
+				break;
 			}
 		}
+		return flag;
 	}
-}dj;
+}
+using namespace bf;
