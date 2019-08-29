@@ -164,6 +164,20 @@ struct Highest_relabel_to_front
 		parttt.resize(node_sum + 1);
 		height.resize(node_sum * 2 + 2, 0);
 	}
+	//ÍêÈ«Çå¿Õ
+	void reset(int s)
+	{
+		for (int i = 0; i < node_sum; ++i)
+			ofc[i].clear();
+		rel1.clear();
+		flow_map.clear();
+		parttt.clear();
+		height.clear();
+		rel1.resize(s + 1);
+		flow_map.resize(s + 1);
+		parttt.resize(s + 1);
+		height.resize(s * 2 + 2, 0);
+	}
 };
 const int inf = 0x6fffffff;
 

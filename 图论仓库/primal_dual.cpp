@@ -19,161 +19,104 @@
 #include<memory>
 #include<functional>
 using namespace std;
+/*
+#include <bits/stdc++.h>
+#include <ext/pb_ds/priority_queue.hpp>
+namespace PrimalDual {
+const int MAXN = 400000;
+struct Node {
+	int v, f, w, index;
 
-namespace primal_dual
+	Node(int v, int f, int w, int index) : v(v), f(f), w(w), index(index) {}
+};
+
+std::vector<Node> edge[MAXN];
+
+inline void addEdge(const int u, const int v, const int f, const int w) {
+	edge[u].push_back(Node(v, f, w, edge[v].size()));
+	edge[v].push_back(Node(u, 0, -w, edge[u].size() - 1));
+}
+
+typedef std::pair<int, int> Pair;
+
+const int INF = 0x3f3f3f3f;
+
+typedef __gnu_pbds::priority_queue<Pair, std::greater<Pair> > PriorityQueue;
+int pree[MAXN], prev[MAXN];
+PriorityQueue::point_iterator id[MAXN];
+
+int h[MAXN], d[MAXN];
+bool vis[MAXN];
+
+inline void spfa(const int s, const int n) {
+	static std::queue<int> q;
+	memset(h, 0x3f, sizeof(int) * (n + 1));
+	memset(vis, 0, sizeof(bool) * (n + 1));
+	q.push(s), h[s] = 0;
+	while (!q.empty()) {
+		register int u = q.front();
+		q.pop();
+		vis[u] = false;
+		for (register int i = 0; i < edge[u].size(); i++) {
+			Node *e = &edge[u][i];
+			if (e->f && h[u] + e->w < h[e->v]) {
+				h[e->v] = h[u] + e->w;
+				if (!vis[e->v]) q.push(e->v), vis[e->v] = true;
+			}
+		}
+	}
+}
+
+inline void dijkstra(const int s, const int n) {
+	memset(vis, 0, n + 1);
+	memset(d, 0x3f, sizeof(int) * (n + 1));
+	memset(id, 0, sizeof(PriorityQueue::point_iterator) * (n + 1));
+	static PriorityQueue q;
+	d[s] = 0, id[s] = q.push(Pair(0, s));
+	while (!q.empty()) {
+		Pair now = q.top();
+		q.pop();
+		register int v = now.second;
+		if (vis[v] || d[v] < now.first) continue;
+		vis[v] = true;
+		for (register int i = 0; i < edge[v].size(); i++) {
+			Node *p = &edge[v][i];
+			register int w = d[v] + p->w + h[v] - h[p->v];
+			if (p->f > 0 && d[p->v] > w) {
+				d[p->v] = w, prev[p->v] = v, pree[p->v] = i;
+				if (id[p->v] != NULL) q.modify(id[p->v], Pair(d[p->v], p->v));
+				else id[p->v] = q.push(Pair(d[p->v], p->v));
+			}
+		}
+	}
+}
+
+inline Pair minCostFlow(const int s, const int t, const int n, int f) {
+	Pair ans(0, 0);
+	dijkstra(s, n);
+	while (f > 0) {
+		dijkstra(s, n);
+		if (d[t] == INF) break;
+		//std::cout<<h[t]<<" "<<d[t]<<std::endl;
+		for (register int i = 0; i <= n; i++) h[i] += d[i];
+		register int flow = f;
+		//std::cout<<h[t]<<" "<<d[t]<<std::endl;
+		for (register int i = t; i != s; i = prev[i])
+			flow = std::min(flow, edge[prev[i]][pree[i]].f);
+		f -= flow, ans.first += flow, ans.second += flow * h[t];
+		for (register int i = t; i != s; i = prev[i]) {
+			Node *p = &edge[prev[i]][pree[i]];
+			p->f -= flow, edge[p->v][p->index].f += flow;
+		}
+	}
+	return ans;
+}
+void init()
 {
-	const int MAXN = 6100;
-	struct node
-	{
-		int v, f, w, index;
-		node(int v,int f,int w,int index) : v(v), f(f), w(w), index(index) {}
-	};
-	vector<node> edge[MAXN];
-	void addedge(int u,int v,int flow,int cost)
-	{
-		edge[u].push_back(node(v, flow, cost, edge[v].size()));
-		edge[v].push_back(node(u, 0, -cost, edge[u].size() - 1));
-	}
-	const int inf= 0x3f3f3f3f;
-	int pree[MAXN], prev[MAXN];
-	int h[MAXN], dis[MAXN];
-	bool vis[MAXN];
-	priority_queue<pair<int,int>> pq;
-	void spfa(const int s,const int n)
-	{
-		queue<int> q;
-		memset(h, 0x3f, sizeof(h));
-		memset(vis, 0, sizeof(vis));
-		q.push(s);
-		h[s] = 0;
-		while (!q.empty())
-		{
-			int u= q.front();
-			q.pop();
-			vis[u] = false;
-			for (auto &p : edge[u])
-			{
-				if (p.f > 0 && h[u] + p.w < h[p.v])
-				{
-					h[p.v] = h[u] + p.w;
-					if (!vis[p.v])
-						q.push(p.v), vis[p.v] = true;
-				}
-			}
-		}
-	}
-	void dijkstra(int s,int n)
-	{
-		memset(vis, 0, n + 1);
-		memset(dis, 0x3f, sizeof(dis));
-		int v,w;
-		dis[s] = 0;
-		pq.push(make_pair(0,s));
-		while (!pq.empty())
-		{
-			pair<int,int> now = pq.top();
-			pq.pop();
-			v = now.second;
-			if (dis[v]<now.first)continue;
-			vis[v] = true;
-			for (int i=0;i<edge[v].size();++i)
-			{
-				node *p = &edge[v][i];
-				w = dis[v] + p->w + h[v] - h[p->v];
-				if (p->f > 0 && dis[p->v] > w)
-				{
-					dis[p->v] = w, prev[p->v] = v, pree[p->v] = i;
-					pq.push(make_pair(dis[p->v],p->v));
-				}
-			}
-		}
-	}
-	pair<int,int> MCMF(int s,int t,int n,int f)
-	{
-		pair<int, int> ans;
-		spfa(s, n);
-		while (f > 0)
-		{
-			dijkstra(s, n);
-			if (dis[t] == inf) break;
-			for (int i = 0; i <= n; ++i) h[i] += dis[i];
-			int flow = f;
-			for (int i = t; i != s; i = prev[i])
-				flow = min(flow, edge[prev[i]][pree[i]].f);
-			f -= flow, ans.first += flow, ans.second += flow * h[t];
-			for (int i = t; i != s; i = prev[i])
-			{
-				node *p = &edge[prev[i]][pree[i]];
-				{
-					p->f -= flow;
-					edge[p->v][p->index].f += flow;
-				}
-			}
-		}
-		return  ans;
-	}
-	void init()
-	{
-		for (int i = 0; i < MAXN; ++i) edge[i].clear();
-	}
-
+	for(int i=0;i<MAXN;++i)
+		edge[i].clear();
+}
 }
 using namespace std;
-using namespace primal_dual;
-#define For(i,j) for(int i=0;i<j;++i)
-/*
-struct node2
-{
-	int x, y, w;
-	node2(int i, int j, int k) :x(i), y(j), w(k) {}
-};
-list<node2> part;
-set<int> part2, part4;
-int main()
-{
-	ios::sync_with_stdio(false);
-	cin.tie(0);
-	cout.tie(0);
-	int a;
-	cin >> a;
-	int a1, a2, a3, b1, b2, b3;
-	while (a--)
-	{
-		init();
-		part.clear(), part2.clear(), part4.clear();
-		cin >> a1 >> a2 >> a3;
-		for (int i = 0; i < a3; ++i)
-		{
-			cin >> b1 >> b2 >> b3;
-			part.push_back(node2(b1, b2, b3));
-			part2.insert(b1);
-			part2.insert(b2);
-		}
-		map<int, int> trans;
-		int L = 1;
-		for (auto &s : part2)
-		{
-			trans[s] = L++;
-		}
-		for (auto &s : part)
-		{
-			s.x = trans[s.x];
-			s.y = trans[s.y] + 1;
-			addedge(s.x, s.y, 1, -s.w);
-			part4.insert(s.x);
-			part4.insert(s.y);
-		}
-		addedge(0, 1, a2, 0);
-		vector<int> part3(part4.begin(), part4.end());
-		for (int i = 0; i < part3.size() - 1; ++i)
-		{
-			addedge(part3[i], part3[i + 1], a2, 0);
-		}
-		int n = part3.back() + 10;
-		addedge(part3.back(), part3.back() + 5, a2, 0);
-		int cost;
-		pair<int,int> res = MCMF(0, n - 5, n, INT_MAX);
-		cout << -res.second << endl;
-	}
-	return 0;
-}*/
+using namespace PrimalDual;
+*/
