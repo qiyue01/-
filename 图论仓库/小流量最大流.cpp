@@ -52,7 +52,6 @@ bool bfs(int s, int t)
 		{
 			if (vis[p.v] == false && p.f > 0)
 			{
-
 				vis[p.v] = true;
 				pre[p.v] = k;
 				Max[p.v] = min(p.f, Max[k]);

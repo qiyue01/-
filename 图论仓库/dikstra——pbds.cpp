@@ -26,7 +26,8 @@
 #include<ext/pb_ds/tag_and_trait.hpp>
 #include<ext/pb_ds/tree_policy.hpp>
 #include<ext/pb_ds/trie_policy.hpp>
-# define maxn 6000000+10
+# define maxn 1000000+10
+#define int long long
 using namespace std;
 int head[maxn];
 int vis[maxn];
@@ -64,17 +65,20 @@ public:
 	};
 	vector<node> way;
 	vector<__gnu_pbds::priority_queue<node>::point_iterator> Iter;
-	void set(long i)
+	__gnu_pbds::priority_queue<node, greater<node>> part;
+	void set(int i)
 	{
+		memset(head,-1,sizeof(head));
 		way.resize(i + 1);
 		Iter.resize(i + 1);
 	}
-	void insert(long u, long v, long w)
+	void insert(int u, int v, int w)
 	{
 		add(u, v, w);
 	}
-	bool relax(long u, long v, long w)
+	bool relax(int u, int v, int w)
 	{
+
 		if (way[v].distance > way[u].distance + w)
 		{
 			way[v].distance = way[u].distance + w;
@@ -82,16 +86,16 @@ public:
 		}
 		return false;
 	}
-	long shortest_path(long beginning, long ending)
+	int shortest_path(int beginning, int ending)
 	{
-		for (long i = 0; i < way.size(); ++i)
+		for (int i = 0; i < way.size(); ++i)
 		{
-			way[i].distance = 110000000000;
+			way[i].distance = 1e18;
 			way[i].father = -1;
 			way[i].sign = i;
 		}
 		way[beginning].distance = 0;
-		__gnu_pbds::priority_queue<node, greater<node>> part;
+
 		part.push(way[beginning]);
 		while (part.size() != 0)
 		{
@@ -109,7 +113,7 @@ public:
 		}
 		return way[ending].distance;
 	}
-};
+}dj;
 inline int read()
 {
 	int x = 0, f = 1; char ch = getchar();
